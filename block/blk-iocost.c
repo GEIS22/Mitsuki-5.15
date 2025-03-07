@@ -1336,24 +1336,16 @@ static bool iocg_kick_delay(struct ioc_gq *iocg, struct ioc_now *now)
 {
 	struct ioc *ioc = iocg->ioc;
 	struct blkcg_gq *blkg = iocg_to_blkg(iocg);
-	u64 tdelta, delay, new_delay, shift;
+	u64 tdelta, delay, new_delay;
 	s64 vover, vover_pct;
 	u32 hwa;
 
 	lockdep_assert_held(&iocg->waitq.lock);
 
-	/*
-	 * If the delay is set by another CPU, we may be in the past. No need to
-	 * change anything if so. This avoids decay calculation underflow.
-	 */
-	if (time_before64(now->now, iocg->delay_at))
-		return false;
-
 	/* calculate the current delay in effect - 1/2 every second */
 	tdelta = now->now - iocg->delay_at;
-	shift = div64_u64(tdelta, USEC_PER_SEC);
-	if (iocg->delay && shift < BITS_PER_LONG)
-		delay = iocg->delay >> shift;
+	if (iocg->delay)
+		delay = iocg->delay >> div64_u64(tdelta, USEC_PER_SEC);
 	else
 		delay = 0;
 

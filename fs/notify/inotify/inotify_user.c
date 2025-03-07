@@ -765,15 +765,13 @@ SYSCALL_DEFINE3(inotify_add_watch, int, fd, const char __user *, pathname,
 		if (path.dentry->d_op->d_canonical_path) {
 			path.dentry->d_op->d_canonical_path(&path,
 							    &alteredpath);
-			if (alteredpath.dentry != (struct dentry *)-ENOSYS) {
-				if (IS_ERR(alteredpath.dentry)) {
-					ret = PTR_ERR(alteredpath.dentry);
-					goto path_put_and_out;
-				}
-
-				canonical_path = &alteredpath;
-				path_put(&path);
+			if (IS_ERR(alteredpath.dentry)) {
+				ret = PTR_ERR(alteredpath.dentry);
+				goto path_put_and_out;
 			}
+
+			canonical_path = &alteredpath;
+			path_put(&path);
 		}
 	}
 

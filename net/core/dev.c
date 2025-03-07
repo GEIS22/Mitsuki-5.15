@@ -978,7 +978,6 @@ out:
 	up_read(&devnet_rename_sem);
 	return ret;
 }
-EXPORT_SYMBOL_GPL(netdev_get_name);
 
 /**
  *	dev_getbyhwaddr_rcu - find a device by its hardware address
@@ -2299,7 +2298,7 @@ void dev_queue_xmit_nit(struct sk_buff *skb, struct net_device *dev)
 	rcu_read_lock();
 again:
 	list_for_each_entry_rcu(ptype, ptype_list, list) {
-		if (READ_ONCE(ptype->ignore_outgoing))
+		if (ptype->ignore_outgoing)
 			continue;
 
 		/* Never send packets back to the socket
@@ -7151,8 +7150,6 @@ static int napi_threaded_poll(void *data)
 	void *have;
 
 	while (!napi_thread_wait(napi)) {
-		unsigned long last_qs = jiffies;
-
 		for (;;) {
 			bool repoll = false;
 
@@ -7167,7 +7164,6 @@ static int napi_threaded_poll(void *data)
 			if (!repoll)
 				break;
 
-			rcu_softirq_qs_periodic(last_qs);
 			cond_resched();
 		}
 	}
@@ -10557,9 +10553,8 @@ static void netdev_wait_allrefs(struct net_device *dev)
 			rebroadcast_time = jiffies;
 		}
 
-		rcu_barrier();
-
 		if (!wait) {
+			rcu_barrier();
 			wait = WAIT_REFS_MIN_MSECS;
 		} else {
 			msleep(wait);
