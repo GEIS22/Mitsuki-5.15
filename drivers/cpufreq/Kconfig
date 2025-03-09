@@ -349,3 +349,27 @@ config QORIQ_CPUFREQ
 
 endif
 endmenu
+
+config CPU_FREQ_GOV_SCLASHG
+    bool "SclashG"
+    select CPU_FREQ
+    help
+      Governor ini memaksa CPU untuk selalu berjalan pada frekuensi maksimal,
+      meningkatkan respons sistem dengan menghilangkan idle scaling.
+
+      Gunakan ini jika membutuhkan performa tertinggi, seperti gaming
+      atau aplikasi berat lainnya.
+
+config CPU_FREQ_GOV_INTERACTIVE
+	bool "Interactive"
+	depends on CPU_FREQ
+	help
+	  Interactive adalah governor responsif yang menyesuaikan frekuensi CPU berdasarkan beban sistem secara dinamis.
+	  Governor ini memberikan keseimbangan antara performa dan efisiensi daya dengan respons cepat.
+
+config CPU_FREQ_GOV_SCHEDHORIZON
+	bool "SchedHorizon"
+	depends on CPU_FREQ
+	help
+	  SchedHorizon adalah governor yang mengoptimalkan performa CPU berdasarkan jadwal tugas (scheduler).
+	  Governor ini cocok untuk workload yang membutuhkan manajemen tugas secara agresif.

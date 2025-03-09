@@ -1,0 +1,100 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * DTSI file for Snapdragon 685 with Overclocking
+ */
+
+#include "sdm685.dtsi"
+
+&adreno_gpu {
+ compatible = "qcom,adreno-620", "qcom,adreno";
+ operating-points-v2 = <&gpu_sdm685_opp_table>;
+
+ gpu_sdm685_opp_table: opp-table {
+  compatible  = "operating-points-v2";
+
+  opp-2400000000 {
+   opp-hz = /bits/ 64 <2400000000>;
+   opp-level = <RPM_SMD_LEVEL_TURBO>;
+   opp-peak-kBps = <6500000>;
+   opp-supported-hw = <0xFF>;
+  };
+
+  opp-2000000000 {
+   opp-hz = /bits/ 64 <2000000000>;
+   opp-level = <RPM_SMD_LEVEL_NOM_PLUS>;
+   opp-peak-kBps = <5500000>;
+   opp-supported-hw = <0xFF>;
+  };
+
+  opp-1600000000 {
+   opp-hz = /bits/ 64 <1600000000>;
+   opp-level = <RPM_SMD_LEVEL_NOM>;
+   opp-peak-kBps = <4500000>;
+   opp-supported-hw = <0xFF>;
+  };
+ };
+};
+
+&CPU0 {
+ compatible = "qcom,kryo265";
+ capacity-dmips-mhz = <1024>;
+ /delete-property/ operating-points-v2;
+};
+
+&CPU1 {
+ compatible = "qcom,kryo265";
+ capacity-dmips-mhz = <1024>;
+ /delete-property/ operating-points-v2;
+};
+
+&CPU2 {
+ compatible = "qcom,kryo265";
+ capacity-dmips-mhz = <1024>;
+ /delete-property/ operating-points-v2;
+};
+
+&CPU3 {
+ compatible = "qcom,kryo265";
+ capacity-dmips-mhz = <1024>;
+ /delete-property/ operating-points-v2;
+};
+
+&CPU4 {
+ compatible = "qcom,kryo265";
+ capacity-dmips-mhz = <640>;
+ /delete-property/ operating-points-v2;
+};
+
+&CPU5 {
+ compatible = "qcom,kryo265";
+ capacity-dmips-mhz = <640>;
+ /delete-property/ operating-points-v2;
+};
+
+&CPU6 {
+ compatible = "qcom,kryo265";
+ capacity-dmips-mhz = <640>;
+ /delete-property/ operating-points-v2;
+};
+
+&CPU7 {
+ compatible = "qcom,kryo265";
+ capacity-dmips-mhz = <640>;
+ /delete-property/ operating-points-v2;
+};
+
+&gcc {
+ compatible = "qcom,gcc-sdm685";
+};
+
+&gpucc {
+ compatible = "qcom,gpucc-sdm685";
+};
+
+&tlmm {
+ compatible = "qcom,sdm685-pinctrl";
+};
+
+&tsens {
+ #qcom,sensors = <14>;
+};

@@ -28,6 +28,18 @@ config IOSCHED_BFQ
 	real-time applications.  Details in
 	Documentation/block/bfq-iosched.rst
 
+config IOSCHED_SCLASH
+	tristate "Sclash"
+	default y
+	help
+	for performance
+
+config IOSCHED_CASTORICE
+	bool "castorice"
+	default y
+	help
+	increase performance for devices
+
 config BFQ_GROUP_IOSCHED
        bool "BFQ hierarchical scheduling support"
        depends on IOSCHED_BFQ && BLK_CGROUP
